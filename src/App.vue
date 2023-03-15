@@ -7,9 +7,13 @@
             <template v-else>
               <TodoFormAdd />
 
-              <TodoItems />
+              <TodoItems
+                v-if="$store.state.todos.length"
+              />
 
-              <TodoEmpty />
+              <TodoEmpty
+                v-else
+              />
             </template>
         </div>
     </div>
@@ -17,26 +21,29 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import TodoFormAdd from './components/TodoFormAdd.vue';
 import TodoSpinner from './components/TodoSpinner.vue';
 import TodoItems from "@/components/TodoItems";
 import TodoEmpty from "@/components/TodoEmpty";
+import {useStore} from "vuex";
 
 export default {
     name: "App",
     components: {TodoEmpty, TodoItems, TodoSpinner, TodoFormAdd },
 
-  data() {
-    return {
-      loading: false
-    }
-  },
+  setup() {
+      const loading = ref(false);
+      const store = useStore();
 
-  created() {
-      this.loading = true;
-      this.$store.dispatch('getTodos').finally(() => {
-      this.loading = false;
+    loading.value = true;
+    store.dispatch('getTodos').finally(() => {
+      loading.value = false;
     });
+
+      return {
+          loading
+      }
   },
 }
 </script>
