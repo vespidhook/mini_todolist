@@ -1,4 +1,4 @@
-# app
+# Mini Todolist
 
 ## Project setup
 ```
